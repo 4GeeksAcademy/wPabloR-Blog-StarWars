@@ -1,6 +1,7 @@
 export const initialStore=()=>{
   return{
-    people:[]
+    people:[],
+    favorites:[]
   }
 }
 
@@ -12,6 +13,21 @@ export default function storeReducer(store, action = {}) {
       return{
         ...store,
         people: action.payload
+      }
+
+      case 'add_favorite':
+        
+      if (store.favorites.includes(action.payload)) return store;
+        return{
+          ...store,
+          favorites: [...store.favorites, action.payload]
+        }
+
+      case 'delete_favorite':
+        
+      return{
+        ...store,
+        favorites: store.favorites.filter((fav, index) => index !== action.payload) 
       }
       
     default:
