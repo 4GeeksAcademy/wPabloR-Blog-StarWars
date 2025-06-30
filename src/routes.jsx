@@ -1,5 +1,3 @@
-
-
 import {
     createBrowserRouter,
     createRoutesFromElements,
@@ -17,7 +15,7 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Layout />} errorElement={<h1>Not found!</h1>} >
 
         <Route path= "/" element={<Home />} />
-        <Route path="/single/:uid" element={<Single />} />
+        <Route path="/single/:type/:uid" element={<Single />} />
         <Route path="/demo" element={<Demo />} />
       </Route>
     )

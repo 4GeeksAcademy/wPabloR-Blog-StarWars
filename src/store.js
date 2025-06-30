@@ -1,14 +1,16 @@
 export const initialStore=()=>{
   return{
     people:[],
-    favorites:[]
+    favorites:[],
+    planets:[],
+    starships: [],
   }
 }
 
 export default function storeReducer(store, action = {}) {
   switch(action.type){
 
-      case 'load_character':
+      case 'load_characters':
 
       return{
         ...store,
@@ -29,7 +31,21 @@ export default function storeReducer(store, action = {}) {
         ...store,
         favorites: store.favorites.filter((fav, index) => index !== action.payload) 
       }
-      
+
+      case 'load_planets':
+
+      return{
+        ...store,
+        planets: action.payload
+      }
+
+      case 'load_starships':
+
+      return{
+        ...store,
+        starships: action.payload
+      }
+
     default:
       throw Error('Unknown action.');
   }    
