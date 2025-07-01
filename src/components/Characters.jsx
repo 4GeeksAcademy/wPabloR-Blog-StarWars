@@ -1,49 +1,43 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Characters = () => {
 
     const { store, dispatch } = useGlobalReducer();
 
-    useEffect(() => {
-        fetch(`https://www.swapi.tech/api/people/`)
-            .then(resp => resp.json())
-            .then(data => {
-                dispatch({
-                    type: 'load_characters',
-                    payload: data.results
-                });
-            });
-    }, []);
 
-    const addFavorite = (name) => {
+    const toggleFavorite = (name) => {
         dispatch({
-            type: 'add_favorite',
+            type: 'toggle_favorite',
             payload: name
         })
     };
 
     return (
-        <div className="overflow-auto d-flex flex-nowrap gap-3" style={{maxWidth: "100%"}}>
+        <div className="overflow-auto d-flex flex-nowrap gap-3" style={{ maxWidth: "100%" }}>
             {store.people?.length > 0 &&
                 store.people.map(character => (
-                        <div className="card" style={{ width: "18rem", flex: "0 0 auto" }} key={character.uid}>
-                            <img src="https://picsum.photos/300/200" className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h5 className="card-title">{character.name}</h5>
-                                <p>ID: {character.uid}</p>
-                                <Link to={`/single/people/${character.uid}`} className="btn btn-primary">Learn more</Link>
+                    <div className="card shadow-sm border-0 rounded-4" key={character.uid} style={{ width: "18rem", flex: "0 0 auto" }}>
+                        <img src="https://picsum.photos/400/200" className="card-img-top rounded-top-4" alt="..." />
+                        <div className="card-body">
+                            <h5 className="card-title text-dark fw-bold">{character.name}</h5>
+                            <p className="text-muted mb-3">ID: {character.uid}</p>
+                            <div className="d-flex justify-content-between align-items-center">
+                                <Link to={`/single/people/${character.uid}`} className="btn btn-outline-primary btn-sm">
+                                    Learn more
+                                </Link>
                                 <button
-                                    className={`float-end ${store.favorites.includes(character.name) ? "btn btn-warning" : "btn btn-outline-warning"}`}
+                                    className={`btn ${store.favorites.includes(character.name) ? "btn-warning" : "btn-outline-warning"} btn-sm`}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        addFavorite(character.name);
-                                    }}>
+                                        toggleFavorite(character.name);
+                                    }}
+                                >
                                     ❤️
                                 </button>
                             </div>
                         </div>
+                    </div>
                 ))}
         </div>
     );

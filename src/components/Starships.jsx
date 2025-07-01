@@ -1,50 +1,48 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Starships = () => {
 
     const { store, dispatch } = useGlobalReducer();
 
-    useEffect(() => {
-        fetch(`https://www.swapi.tech/api/starships/`)
-            .then(resp => resp.json())
-            .then(data => {
-                dispatch({
-                    type: 'load_starships',
-                    payload: data.results
-                });
-            });
-    }, []);
 
-    const addFavorite = (name) => {
+    const toggleFavorite = (name) => {
         dispatch({
-            type: 'add_favorite',
+            type: 'toggle_favorite',
             payload: name
         })
     };
 
     return (
-        <div className="overflow-auto d-flex flex-nowrap gap-3" style={{maxWidth: "100%"}}>
-            {store.starships?.length > 0 &&
-                store.starships.map(starship => (
-                        <div className="card" style={{ width: "18rem", flex: "0 0 auto" }} key={starship.uid}>
-                            <img src="https://picsum.photos/300/200" className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h5 className="card-title">{starship.name}</h5>
-                                <p>ID: {starship.uid}</p>
-                                <Link to={`/single/starships/${starship.uid}`} className="btn btn-primary">Learn more</Link>
-                                <button
-                                    className={`float-end ${store.favorites.includes(starship.name) ? "btn btn-warning" : "btn btn-outline-warning"}`}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        addFavorite(starship.name);
-                                    }}>
-                                    ❤️
-                                </button>
-                            </div>
-                        </div>
-                ))}
-        </div>
-    );
+    <div className="overflow-auto d-flex flex-nowrap gap-3" style={{ maxWidth: "100%" }}>
+      {store.starships?.length > 0 &&
+        store.starships.map((starship) => (
+          <div
+            key={starship.uid}
+            className="card shadow-sm border-0 rounded-4"
+            style={{ width: "18rem", flex: "0 0 auto" }}
+          >
+            <img src="https://picsum.photos/400/200" className="card-img-top rounded-top-4" alt="..." />
+            <div className="card-body">
+              <h5 className="card-title text-dark fw-bold">{starship.name}</h5>
+              <p className="text-muted mb-3">ID: {starship.uid}</p>
+              <div className="d-flex justify-content-between align-items-center">
+                <Link to={`/single/starships/${starship.uid}`} className="btn btn-outline-primary btn-sm">
+                  Learn more
+                </Link>
+                <button
+                  className={`btn ${store.favorites.includes(starship.name) ? "btn-warning" : "btn-outline-warning"} btn-sm`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(starship.name);
+                  }}
+                >
+                  ❤️
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
 };

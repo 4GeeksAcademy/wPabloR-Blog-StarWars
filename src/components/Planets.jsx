@@ -1,50 +1,48 @@
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Planets = () => {
 
     const { store, dispatch } = useGlobalReducer();
 
-    useEffect(() => {
-        fetch(`https://www.swapi.tech/api/planets/`)
-            .then(resp => resp.json())
-            .then(data => {
-                dispatch({
-                    type: 'load_planets',
-                    payload: data.results
-                });
-            });
-    }, []);
 
-    const addFavorite = (name) => {
+    const toggleFavorite = (name) => {
         dispatch({
-            type: 'add_favorite',
+            type: 'toggle_favorite',
             payload: name
         })
     };
 
     return (
-        <div className="overflow-auto d-flex flex-nowrap gap-3" style={{maxWidth: "100%"}}>
-            {store.planets?.length > 0 &&
-                store.planets.map(planet => (
-                        <div className="card" style={{ width: "18rem", flex: "0 0 auto" }} key={planet.uid}>
-                            <img src="https://picsum.photos/300/200" className="card-img-top" alt="..." />
-                            <div className="card-body">
-                                <h5 className="card-title">{planet.name}</h5>
-                                <p>ID: {planet.uid}</p>
-                                <Link to={`/single/planets/${planet.uid}`} className="btn btn-primary">Learn more</Link>
-                                <button
-                                    className={`float-end ${store.favorites.includes(planet.name) ? "btn btn-warning" : "btn btn-outline-warning"}`}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        addFavorite(planet.name);
-                                    }}>
-                                    ❤️
-                                </button>
-                            </div>
-                        </div>
-                ))}
-        </div>
-    );
+    <div className="overflow-auto d-flex flex-nowrap gap-3" style={{ maxWidth: "100%" }}>
+      {store.planets?.length > 0 &&
+        store.planets.map((planet) => (
+          <div
+            key={planet.uid}
+            className="card shadow-sm border-0 rounded-4"
+            style={{ width: "18rem", flex: "0 0 auto" }}
+          >
+            <img src="https://picsum.photos/400/200" className="card-img-top rounded-top-4" alt="..." />
+            <div className="card-body">
+              <h5 className="card-title text-dark fw-bold">{planet.name}</h5>
+              <p className="text-muted mb-3">ID: {planet.uid}</p>
+              <div className="d-flex justify-content-between align-items-center">
+                <Link to={`/single/planets/${planet.uid}`} className="btn btn-outline-primary btn-sm">
+                  Learn more
+                </Link>
+                <button
+                  className={`btn ${store.favorites.includes(planet.name) ? "btn-warning" : "btn-outline-warning"} btn-sm`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleFavorite(planet.name);
+                  }}
+                >
+                  ❤️
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+    </div>
+  );
 };

@@ -1,52 +1,58 @@
-export const initialStore=()=>{
-  return{
-    people:[],
-    favorites:[],
-    planets:[],
+export const initialStore = () => {
+  return {
+    people: [],
+    favorites: [],
+    planets: [],
     starships: [],
   }
 }
 
 export default function storeReducer(store, action = {}) {
-  switch(action.type){
+  switch (action.type) {
 
-      case 'load_characters':
+    case 'load_characters':
 
-      return{
+      return {
         ...store,
         people: action.payload
       }
 
-      case 'add_favorite':
-        
-      if (store.favorites.includes(action.payload)) return store;
-        return{
+    case 'toggle_favorite':
+
+      if (store.favorites.includes(action.payload)) {
+        return {
+          ...store,
+          favorites: store.favorites.filter(fav => fav !== action.payload)
+        };
+      } else {
+        return {
           ...store,
           favorites: [...store.favorites, action.payload]
         }
-
-      case 'delete_favorite':
-        
-      return{
-        ...store,
-        favorites: store.favorites.filter((fav, index) => index !== action.payload) 
       }
 
-      case 'load_planets':
+    case 'delete_favorite':
 
-      return{
+      return {
+        ...store,
+        favorites: store.favorites.filter((fav, index) => index !== action.payload)
+      }
+
+    case 'load_planets':
+
+      return {
         ...store,
         planets: action.payload
       }
 
-      case 'load_starships':
+    case 'load_starships':
 
-      return{
+      return {
         ...store,
         starships: action.payload
       }
 
     default:
       throw Error('Unknown action.');
-  }    
+  }
 }
